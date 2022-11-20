@@ -1,0 +1,12 @@
+{
+  "name": "link",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/masnormen/link",
+  "author": "Nourman Hajar",
+  "license": "MIT",
+  "devDependencies": {
+    "vercel": "^28.5.5",
+    "vercel-rust": "^3.1.2"
+  }
+}

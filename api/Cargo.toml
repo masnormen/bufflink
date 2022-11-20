@@ -1,0 +1,25 @@
+[package]
+name = "index"
+version = "1.0.0"
+authors = [ "Your Name <your@site.com>" ]
+edition = "2018"
+
+[dependencies]
+http = "0.2.8"
+vercel_lambda = "*"
+postgres = "*"
+dotenv = "*"
+serde_json = "*"
+woothee = "*"
+
+  [dependencies.postgres-types]
+  version = "*"
+  features = [ "derive", "with-serde_json-1" ]
+
+  [dependencies.serde]
+  version = "1.0.118"
+  features = [ "derive" ]
+
+[[bin]]
+name = "_link_"
+path = "/Users/nourman.hajar/Stuff/link/api/[link].rs"
