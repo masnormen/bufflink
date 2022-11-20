@@ -1,7 +1,7 @@
 [package]
 name = "link"
 version = "1.0.0"
-authors = [ "Nourman Hajar <your@site.com>" ]
+authors = [ "Nourman Hajar <nourmanhajar@gmail.com>" ]
 edition = "2021"
 
 [dependencies]

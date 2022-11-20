@@ -1,9 +1,8 @@
 {
   "name": "link",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/masnormen/link",
-  "author": "Nourman Hajar",
+  "author": "Nourman Hajar <nourmanhajar@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "vercel": "^28.5.5",
