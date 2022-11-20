@@ -6,6 +6,7 @@ use util::UAResult;
 use vercel_lambda::{error::VercelError, lambda, IntoResponse, Request, Response};
 use woothee::parser::Parser;
 
+#[allow(non_snake_case)]
 fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
     let DATABASE_URL: String = dotenv::var("DATABASE_URL").unwrap();
     let IPINFO_TOKEN: String = dotenv::var("IPINFO_TOKEN").unwrap();
@@ -71,6 +72,8 @@ fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
         None => "".to_owned(),
     };
 
+    println!("{:?}", req.headers());
+
     /* Parse IP info */
 
     let ip = match req.headers().get("x-real-ip") {
@@ -78,16 +81,20 @@ fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
         None => "".to_owned(),
     };
 
-    let mut ipinfo = IpInfo::new(IpInfoConfig {
+    let ipinfo_client = IpInfo::new(IpInfoConfig {
         token: Some(IPINFO_TOKEN),
         ..Default::default()
-    })
-    .unwrap();
-    let ip_binding = ipinfo.lookup(&[&ip]).unwrap_or_default();
-    let ip_map = ip_binding.get(&ip);
-    let ip_info = match ip_map {
-        Some(info) => serde_json::to_value(info).unwrap(),
-        None => serde_json::to_value("").unwrap(),
+    });
+
+    let ip_info = if let Ok(mut ipinfo) = ipinfo_client {
+        let ip_binding = ipinfo.lookup(&[&ip]).unwrap_or_default();
+        let ip_map = ip_binding.get(&ip);
+        match ip_map {
+            Some(info) => serde_json::to_value(info).unwrap(),
+            None => serde_json::to_value("").unwrap(),
+        }
+    } else {
+        serde_json::to_value("").unwrap()
     };
 
     client
