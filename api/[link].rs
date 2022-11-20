@@ -22,6 +22,7 @@ fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
     if !query.contains_key("link") {
         return Ok(Response::builder()
             .status(200)
+            .header("Cache-Control", "public, max-age=0, must-revalidate")
             .body("Hey, you found my link shortener!")
             .unwrap());
     }
@@ -39,6 +40,7 @@ fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
     if links.is_empty() {
         return Ok(Response::builder()
             .status(404)
+            .header("Cache-Control", "public, max-age=0, must-revalidate")
             .body("Link not found!")
             .unwrap());
     }
@@ -64,15 +66,20 @@ fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
         Some(referer) => referer.to_str().unwrap().to_owned(),
         None => "".to_owned(),
     };
+    let ip = match req.headers().get("x-real-ip") {
+        Some(ip) => ip.to_str().unwrap().to_owned(),
+        None => "".to_owned(),
+    };
 
     client
         .execute(
-            "INSERT INTO links_view (link, browser_info, referrer_link, referrer_site) VALUES ($1, $2, $3, $4)",
+            "INSERT INTO links_view (link, browser_info, referrer_link, referrer_site, ip) VALUES ($1, $2, $3, $4, $5)",
             &[
                 &link,
                 &browser_info,
                 &referrer_link,
                 &referrer_site,
+                &ip
             ],
         )
         .unwrap();
@@ -80,6 +87,7 @@ fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
     let response = Response::builder()
         .status(308)
         .header("Location", target)
+        .header("Cache-Control", "public, max-age=0, must-revalidate")
         .body("Redirecting...")
         .expect("Internal server error");
 
