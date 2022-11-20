@@ -1,8 +1,8 @@
 [package]
-name = "index"
+name = "link"
 version = "1.0.0"
-authors = [ "Your Name <your@site.com>" ]
-edition = "2018"
+authors = [ "Nourman Hajar <your@site.com>" ]
+edition = "2021"
 
 [dependencies]
 http = "0.2.8"
@@ -23,3 +23,7 @@ woothee = "*"
 [[bin]]
 name = "_link_"
 path = "/Users/nourman.hajar/Stuff/link/api/[link].rs"
+
+[lib]
+name = "util"
+path = "_util.rs"
