@@ -11,6 +11,7 @@ postgres = "*"
 dotenv = "*"
 serde_json = "*"
 woothee = "*"
+ipinfo = "0.3"
 
   [dependencies.postgres-types]
   version = "*"
@@ -21,8 +22,8 @@ woothee = "*"
   features = [ "derive" ]
 
 [[bin]]
-name = "_link_"
-path = "/Users/nourman.hajar/Stuff/link/api/[link].rs"
+name = "index"
+path = "/Users/nourman.hajar/Stuff/link/api/index.rs"
 
 [lib]
 name = "util"
