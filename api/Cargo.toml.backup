@@ -24,7 +24,3 @@ ipinfo = "0.3"
 [lib]
 name = "util"
 path = "_util.rs"
-
-[[bin]]
-name = "index"
-path = "/Users/nourman.hajar/Stuff/link/api/index.rs"
