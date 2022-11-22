@@ -4,5 +4,5 @@
       "runtime": "vercel-rust@3.1.2"
     }
   },
-  "rewrites": [{ "source": "/:link*", "destination": "/api/?link=:link*" }]
+  "routes": [{ "src": "/(.*)", "dest": "/api/index.rs?link=$1" }]
 }

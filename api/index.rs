@@ -16,15 +16,16 @@ fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
     let query: HashMap<&str, &str> = req
         .uri()
         .query()
-        .unwrap()
+        .unwrap_or_default()
         .split('&')
         .map(|s| {
             let mut split = s.split('=');
-            (split.next().unwrap(), split.next().unwrap())
+            (
+                split.next().unwrap_or_default(),
+                split.next().unwrap_or_default(),
+            )
         })
         .collect();
-
-    println!("{:?}", query);
 
     let link = query.get("link").unwrap_or(&"");
 
@@ -32,8 +33,8 @@ fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
         return Ok(Response::builder()
             .status(200)
             .header("Cache-Control", "public, max-age=0, must-revalidate")
-            .body("Hey, you found my link shortener!")
-            .unwrap());
+            .body("Hey, you found my link shortener! Visit my site at: https://nourman.id/ :D")
+            .expect("Internal server error"));
     }
 
     /* Get link target from database */
@@ -49,7 +50,7 @@ fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
             .status(404)
             .header("Cache-Control", "public, max-age=0, must-revalidate")
             .body("Link not found!")
-            .unwrap());
+            .expect("Internal server error"));
     }
 
     let target = links[0].get::<_, String>("target");
@@ -71,8 +72,6 @@ fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
         Some(referer) => referer.to_str().unwrap().to_owned(),
         None => "".to_owned(),
     };
-
-    println!("{:?}", req.headers());
 
     /* Parse IP info */
 
@@ -108,7 +107,7 @@ fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
                 &ip_info
             ],
         )
-        .unwrap();
+        .expect("Error when inserting log");
 
     let response = Response::builder()
         .status(308)
